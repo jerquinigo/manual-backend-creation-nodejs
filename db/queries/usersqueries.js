@@ -1,5 +1,15 @@
 const { db } = require("../index.js");
 
+getAllUsers = (req, res, next) => {
+  db.any("SELECT name,email FROM users").then(users => {
+    res.status(200).json({
+      status: "success",
+      users: users,
+      message: "all users present"
+    });
+  });
+};
+
 createUser = (req, res, next) => {
   db.one(
     "INSERT INTO users(name, email, password, profile_pic) VALUES(${name},${email},${password},${profile_pic}) RETURNING name",
@@ -23,5 +33,6 @@ createUser = (req, res, next) => {
 };
 
 module.exports = {
-  createUser
+  createUser,
+  getAllUsers
 };
