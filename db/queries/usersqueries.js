@@ -10,6 +10,21 @@ getAllUsers = (req, res, next) => {
   });
 };
 
+deleteUser = (req, res, next) => {
+  let userId = parseInt(req.params.id);
+  db.result("DELETE FROM users where id=$1", [userId])
+    .then(() => {
+      res.status(200).json({
+        status: "success",
+        message: "user has been deleted"
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      return next(err);
+    });
+};
+
 createUser = (req, res, next) => {
   db.one(
     "INSERT INTO users(name, email, password, profile_pic) VALUES(${name},${email},${password},${profile_pic}) RETURNING name",
@@ -34,5 +49,6 @@ createUser = (req, res, next) => {
 
 module.exports = {
   createUser,
-  getAllUsers
+  getAllUsers,
+  deleteUser
 };
